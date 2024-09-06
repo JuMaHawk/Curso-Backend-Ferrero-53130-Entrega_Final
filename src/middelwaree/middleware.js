@@ -2,15 +2,6 @@ import { cookieExtractor } from "../config/passport.config.js";
 import jwt from "jsonwebtoken"
 
 
-export const authorization = (role) => {
-    return async (req, res, next) => {
-        if (req.user.role !== role) {
-            return res.status(403).send({ message: "No tenes los permisos necesarios para acceder" });
-        }
-        next();
-    }
-}
-
 export const handlePolicies = (policies) => {
     return async (req, res, next) => {
 
@@ -27,7 +18,6 @@ export const handlePolicies = (policies) => {
             console.log("Permiso denegado")
             res.status(500).send("Acceso denegado a usuarios con tu rol")
         }
-        console.log("Paso de largo los if")
         req.user = user;
         next();
     }

@@ -1,3 +1,8 @@
+import jwt from "jsonwebtoken"
+import ProductManager from "./productController.js";
+import ProductsModel from "../models/products.model.js";
+const productManager = new ProductManager
+
 class ViewsController {
 
     async home(req, res) {
@@ -5,7 +10,10 @@ class ViewsController {
             if (!req.cookies["userLogin"]) {
                 return res.redirect("/login")
             }
-            res.render("home", { user: req.user })
+            const token = req.cookies["userLogin"]; 
+            const user = jwt.verify(token, "coderhouse")
+            const productos = await ProductsModel.find().lean()
+            res.render("home", {user, productos})
         } catch (error) {
             res.status(500).json({ error: "Error interno del servidor, este" })
         }
